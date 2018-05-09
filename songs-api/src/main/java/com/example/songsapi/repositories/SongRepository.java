@@ -1,12 +1,12 @@
 package com.example.songsapi.repositories;
 
-import com.example.songsapi.models.Song;
+import com.example.songsapi.models.Songs;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import javax.persistence.Table;
-import java.util.List;
-public interface SongRepository extends CrudRepository<Song, Long> {
+public interface SongRepository extends CrudRepository<Songs, Long> {
+@Query("SELECT s FROM Songs s WHERE LOWER(s.title) LIKE LOWER(CONCAT('%',:title,'%'))")
+Iterable<Songs> findSongsBytitle(@Param("title") String title);
 
 }

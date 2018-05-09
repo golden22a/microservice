@@ -1,23 +1,21 @@
 package com.example.songsapi.controllers;
 
-import com.example.songsapi.models.Song;
+import com.example.songsapi.models.Songs;
 import com.example.songsapi.repositories.SongRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
 @RestController
 public class SongsController {
     @Autowired
     private SongRepository songRepository;
     @GetMapping("/")
-    public Iterable<Song> findAllSongs() {
+    public Iterable<Songs> findAllSongs() {
         return songRepository.findAll();
     }
     @GetMapping("/{songsId}")
-    public Song findSongById(@PathVariable Long songId) {
+    public Songs findSongById(@PathVariable Long songId) {
         return songRepository.findOne(songId);
     }
     @DeleteMapping("/{songId}")
@@ -26,15 +24,21 @@ public class SongsController {
         return HttpStatus.OK;
     }
     @PostMapping("/")
-    public Song createNewUser(@RequestBody Song newSong) {
-        return songRepository.save(newSong);
+    public Songs createNewUser(@RequestBody Songs newSongs) {
+        return songRepository.save(newSongs);
     }
     @PatchMapping("/{songId}")
-    public Song updateUserById(@PathVariable Long songId, @RequestBody Song songRequest) {
+    public Songs updateUserById(@PathVariable Long songId, @RequestBody Songs songsRequest) {
 
-        Song songFromDb = songRepository.findOne(songId);
-        songFromDb.setTitle(songRequest.getTitle());
-        songFromDb.setLength(songRequest.getLength());
-        return songRepository.save(songFromDb);
+        Songs songsFromDb = songRepository.findOne(songId);
+        songsFromDb.setTitle(songsRequest.getTitle());
+        songsFromDb.setLength(songsRequest.getLength());
+        return songRepository.save(songsFromDb);
     }
+    @GetMapping("/search/{title}")
+    public Iterable<Songs> findByTitle(@PathVariable String title){
+        return songRepository.findSongsBytitle(title);
+
+    }
+
 }
